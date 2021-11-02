@@ -1,0 +1,23 @@
+Anon
+
+Rectangle r = new Rectangle(2,4);
+System.Debug(r.IsSquare());
+System.Debug(r.GetSurface());
+
+Circle c = new Circle(6);
+System.Debug(c.getCircumference());
+System.Debug(Math.Round(c.GetSurface(),3));
+
+Grid g = new Grid();
+g.moveDown();
+g.moveLeft();
+g.moveUp();
+g.moveUp();
+g.moveLeft();
+g.moveLeft();
+g.moveUp();
+g.moveUp();
+g.moveUp();
+g.moveUp();
+g.moveRight();
+
