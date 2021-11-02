@@ -21,7 +21,7 @@ public with sharing class ClassesAndObjects_Test
         System.AssertEquals(113.04, Math.roundToLong(c.GetSurface()), 'GetSurface doesn\'t calculate the area correctly!');
     }
     
-
+    @IsTest
     private static void testGrid()
     {
         Grid g = new Grid();
@@ -40,6 +40,7 @@ public with sharing class ClassesAndObjects_Test
         //TODO: test location with @isTestVisible
     }
 
+    @IsTest
     private static void testBooks()
     {
         Author w = new Author('John', 'Doe');
@@ -47,6 +48,8 @@ public with sharing class ClassesAndObjects_Test
         w.newBook('Memoir', BookGenre.BIOGRAPHY_AUTOBIOGRAPHY, 10);
         w.publishBook('Memoir');
 
-        System.assertEquals(true, w.publishedBooks.values()[0].status == Author.PublishedStatus.PUBLISHED, 'Book didn\'t change publish status!'  );
+        Author.Book publishedBook = w.publishedBooks.values()[0][0];
+
+        System.assertEquals(publishedBook.status, Author.PublishedStatus.PUBLISHED, 'Book didn\'t change publish status!'  );
     }
 }

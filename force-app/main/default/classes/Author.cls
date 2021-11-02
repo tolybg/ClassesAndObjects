@@ -4,7 +4,7 @@ public with sharing class Author
     public String LastName;
     public String Email;
     public Map<String,Book> draftBooks  = new Map<String,Book>();
-    public Map<Date,Book> publishedBooks = new Map<Date,Book>();
+    public Map<Date,List<Book>> publishedBooks = new Map<Date,List<Book>>();
 
     //constructors
     public Author() 
@@ -32,20 +32,33 @@ public with sharing class Author
     public void newBook(String bookTitle, BookGenre genre, Integer pages)
     {
         Book b = new Book(bookTitle, genre, pages);
-        draftBooks.put(bookTitle, b);
+        this.draftBooks.put(bookTitle, b);
     }
 
     public void publishBook(String title)
     {
         Book b = draftBooks.get(title);
-        b.publishBook();
-        publishedBooks.put(b.datePublished, b);
-        draftBooks.remove(title);
 
-        System.debug(LoggingLevel.ERROR, 'Published book: ' + title);
-        System.debug(LoggingLevel.ERROR, JSON.serialize(b));
-        System.debug(LoggingLevel.ERROR, 'draftBooks: ' + JSON.serialize(draftBooks));
-        System.debug(LoggingLevel.ERROR, 'publishedBooks: ' + JSON.serialize(publishedBooks));
+        if(b != null)
+        {
+            b.publishBook();
+            List<Book> booksPublishedOnDate = publishedBooks.get(b.datePublished);
+            if(booksPublishedOnDate == null){
+                booksPublishedOnDate = new List<Book>();
+            }
+            booksPublishedOnDate.add(b);
+            publishedBooks.put(b.datePublished, booksPublishedOnDate);
+            draftBooks.remove(title);
+
+            System.debug(LoggingLevel.ERROR, 'Published book: ' + title);
+            System.debug(LoggingLevel.ERROR, JSON.serialize(b));
+            System.debug(LoggingLevel.ERROR, 'draftBooks: ' + JSON.serialize(draftBooks));
+            System.debug(LoggingLevel.ERROR, 'publishedBooks: ' + JSON.serialize(publishedBooks));
+        }
+        else
+        {
+            System.debug(LoggingLevel.ERROR, 'Cannot find this title, check spelling?  (' + title + ')');
+        }
     }
 
     //inner class
@@ -58,7 +71,6 @@ public with sharing class Author
 
         public PublishedStatus status {get; private set;}
         public Date datePublished {get; private set;}
-        private Boolean isPublished = false;
 
         public Book(String bookTitle, BookGenre bookGenre, Integer pages) 
         {
@@ -70,18 +82,10 @@ public with sharing class Author
 
         public void publishBook()
         {
-            // Would this not be cleaner? 
-            // if(isPublished) return;
-
-            if(!isPublished)
+            if(this.Status != PublishedStatus.PUBLISHED)
             {
                 this.Status = PublishedStatus.PUBLISHED;
                 this.DatePublished = System.today();
-                this.isPublished = true;
-            }
-            else
-            {
-                return;
             }
         }
     }

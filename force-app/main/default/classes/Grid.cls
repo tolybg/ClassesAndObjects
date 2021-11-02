@@ -31,8 +31,8 @@ public with sharing class Grid
     private Integer y; //should have been -y
 
     //Grid definition 5x5
-    private Integer maxX = 5;
-    private Integer maxY = 5;
+    private Integer maxX = 4;
+    private Integer maxY = 4;
 
     public Grid() 
     {
@@ -49,7 +49,6 @@ public with sharing class Grid
         }
         else
         {
-            this.y = maxY;
             System.debug('Can\'t move any further');
         }
         showGrid();
@@ -64,7 +63,6 @@ public with sharing class Grid
         }
         else
         {
-            this.y = 0;
             System.debug('Can\'t move any further');
         }
         showGrid();
@@ -79,7 +77,6 @@ public with sharing class Grid
         }
         else
         {
-            this.x = 0;
             System.debug('Can\'t move any further');
         }
         showGrid();
@@ -94,7 +91,6 @@ public with sharing class Grid
         }
         else
         {
-            this.x = maxX;
             System.debug('Can\'t move any further');
         }
         showGrid();
